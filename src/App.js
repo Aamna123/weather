@@ -19,7 +19,7 @@ function App() {
   const handleValueChange = async (value = "Islamabad") => {
     try {
       const locationApi = await fetch(
-        "https://api.positionstack.com/v1/forward?access_key=06eb24f072b3fe087c2e15278e90cb81&query=1600%20" +
+        "http://api.positionstack.com/v1/forward?access_key=06eb24f072b3fe087c2e15278e90cb81&query=1600%20" +
           value
       );
       setCityName(value);
