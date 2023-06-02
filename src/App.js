@@ -15,41 +15,43 @@ function App() {
   const [dailyWeatherCode, setDailyWeatherCode] = useState([]);
   const [dailyDets, setDailyDets] = useState([]);
   const [cityName, setCityName] = useState("");
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setLongitude] = useState(0);
 
   const handleValueChange = async (value = "Islamabad") => {
     try {
-      const locationApi = await fetch(
-        "http://api.positionstack.com/v1/forward?access_key=06eb24f072b3fe087c2e15278e90cb81&query=1600%20" +
-          value
-      );
-      setCityName(value);
-      locationApi.json().then(async (res) => {
-        const data = res.data;
-        console.log(data);
+      fetch(`https://nominatim.openstreetmap.org/search?q=${value}&format=json`)
+        .then((response) => response.json())
+        .then((response) => {
+          // Access the response response here
 
-        try {
-          const date = new Date().toISOString().split("T");
-          const current = new Date();
-          current.setDate(current.getDate() + 6);
-          const endDate = current.toISOString().split("T");
-          console.log(date[0]);
+          // Extract latitude and longitude
+          setCityName(value);
+          setLatitude(response[0].lat);
+          setLongitude(response[0].lon);
+        });
 
-          const r = await fetch(
-            "https://api.open-meteo.com/v1/forecast?latitude=" +
-              data[0].latitude +
-              "&longitude=" +
-              data[0].longitude +
-              "&daily=temperature_2m_max,temperature_2m_min,precipitation_hours,winddirection_10m_dominant,apparent_temperature_max,apparent_temperature_min,weathercode&timezone=GMT&current_weather=true&weathercode&start_date=" +
-              date[0] +
-              "&end_date=" +
-              endDate[0]
-          );
-          console.log("1234");
-          setDataVar(await r.json());
-        } catch (err) {
-          console.log(err);
-        }
-      });
+      try {
+        const date = new Date().toISOString().split("T");
+        const current = new Date();
+        current.setDate(current.getDate() + 6);
+        const endDate = current.toISOString().split("T");
+
+        const r = await fetch(
+          "https://api.open-meteo.com/v1/forecast?latitude=" +
+            latitude +
+            "&longitude=" +
+            longitude +
+            "&daily=temperature_2m_max,temperature_2m_min,precipitation_hours,winddirection_10m_dominant,apparent_temperature_max,apparent_temperature_min,weathercode&timezone=GMT&current_weather=true&weathercode&start_date=" +
+            date[0] +
+            "&end_date=" +
+            endDate[0]
+        );
+
+        setDataVar(await r.json());
+      } catch (err) {
+        console.log(err);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -59,7 +61,6 @@ function App() {
   }, []);
 
   useEffect(() => {
-    console.log(dataVar);
     setCurrentTemperature(dataVar?.current_weather?.temperature);
     setMaxTemp(dataVar?.daily?.temperature_2m_max);
     setMinTemp(dataVar?.daily?.temperature_2m_min);
