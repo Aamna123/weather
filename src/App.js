@@ -19,7 +19,7 @@ function App() {
   const handleValueChange = async (value = "Islamabad") => {
     try {
       const locationApi = await fetch(
-        "http://api.positionstack.com/v1/forward?access_key=06eb24f072b3fe087c2e15278e90cb81&query=1600%20" +
+        "https://api.positionstack.com/v1/forward?access_key=06eb24f072b3fe087c2e15278e90cb81&query=1600%20" +
           value
       );
       setCityName(value);
@@ -77,9 +77,14 @@ function App() {
         title: "Apparent Temperature Min",
         value: dataVar?.daily?.apparent_temperature_min[0],
       },
-      { title: "Dominant Wind Direction", value: dataVar?.daily?.winddirection_10m_dominant[0]+"°" },
-      {title: "Number of hours with rain", value: dataVar?.daily?.precipitation_hours[0]}
-      ,
+      {
+        title: "Dominant Wind Direction",
+        value: dataVar?.daily?.winddirection_10m_dominant[0] + "°",
+      },
+      {
+        title: "Number of hours with rain",
+        value: dataVar?.daily?.precipitation_hours[0],
+      },
     ]);
   }, [dataVar]);
   return (
