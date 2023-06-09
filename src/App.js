@@ -15,43 +15,42 @@ function App() {
   const [dailyWeatherCode, setDailyWeatherCode] = useState([]);
   const [dailyDets, setDailyDets] = useState([]);
   const [cityName, setCityName] = useState("");
-  const [latitude, setLatitude] = useState(0);
-  const [longitude, setLongitude] = useState(0);
 
-  const handleValueChange = async (value = "Islamabad") => {
-    try {
+  const handleValueChange = async (value) => {
+    if(!value){
+      value="Islamabad"
+    }
+    try { await
       fetch(`https://nominatim.openstreetmap.org/search?q=${value}&format=json`)
         .then((response) => response.json())
-        .then((response) => {
+        .then(async(response) => {
           // Access the response response here
 
           // Extract latitude and longitude
           setCityName(value);
-          setLatitude(response[0].lat);
-          setLongitude(response[0].lon);
-        });
-
-      try {
+          
+          try {
         const date = new Date().toISOString().split("T");
         const current = new Date();
         current.setDate(current.getDate() + 6);
         const endDate = current.toISOString().split("T");
-
+        
         const r = await fetch(
           "https://api.open-meteo.com/v1/forecast?latitude=" +
-            latitude +
+            response[0].lat +
             "&longitude=" +
-            longitude +
+            response[0].lon +
             "&daily=temperature_2m_max,temperature_2m_min,precipitation_hours,winddirection_10m_dominant,apparent_temperature_max,apparent_temperature_min,weathercode&timezone=GMT&current_weather=true&weathercode&start_date=" +
             date[0] +
             "&end_date=" +
             endDate[0]
-        );
-
-        setDataVar(await r.json());
-      } catch (err) {
-        console.log(err);
-      }
+            );
+            
+            setDataVar(await r.json());
+          } catch (err) {
+            console.log(err);
+          }
+        });
     } catch (err) {
       console.log(err);
     }
