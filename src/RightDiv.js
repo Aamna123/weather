@@ -3,7 +3,7 @@ import { handleWeatherCode } from "./utils.js";
 import { WiCelsius } from "react-icons/wi";
 import "./RightDiv.css";
 const RightDiv = (props) => {
-  const { currentTemperature = 0, currentTime = "", cityName="" } = props;
+  const { currentTemperature = 0, currentTime = "", cityName = "" } = props;
   const { currentWeathercode = 0, weathercodes = [], isDay = 0 } = props;
   const { maxTempArray = [], minTempArray = [] } = props;
   const [weekdays, setWeekdays] = useState([
@@ -66,28 +66,39 @@ const RightDiv = (props) => {
       </div>
       <div className="lower-outter-div">
         <div className="lower-div">
-          {weekdays.map((weekday, index) => (
-            <div>
-              <div className="city-temp">
-                {handleWeatherCode(weathercodes[index], 1).icon}
+          {weekdays.map((weekday, index) => {
+            const maxTemp = maxTempArray[index];
+            return (
+              <div className="week-item">
+                <div className="city-temp">
+                  {handleWeatherCode(weathercodes[index], 1).icon}
+                </div>
+                <div className="weekday-name">
+                  <span>{weekday}</span>
+                </div>
+                <div>
+                  <div>
+                    <span>
+                      <div className="high-temp">High</div>{" "}
+                      <div className="inner-temp">
+                        {maxTemp}
+                        <WiCelsius className="inner-celsius" />
+                      </div>{" "}
+                    </span>
+                  </div>
+                  <div>
+                    <span>
+                      <div className="low-temp">Low</div>{" "}
+                      <div className="inner-temp">
+                        {minTempArray[index]}
+                        <WiCelsius className="inner-celsius" />
+                      </div>{" "}
+                    </span>
+                  </div>
+                </div>
               </div>
-              <div className="weekday-name">
-                <span>{weekday}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="high-low-temp">
-          {maxTempArray.map((maxTemp,index)=>(
-          <div>
-            <div >
-              <span ><div className="high-temp">High</div> <div className="inner-temp">{maxTemp}< WiCelsius className="inner-celsius"/></div> </span>
-            </div>
-            <div>
-              <span><div className="low-temp">Low</div> <div className="inner-temp">{minTempArray[index]}< WiCelsius className="inner-celsius"/></div> </span>
-            </div>
-          </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>
