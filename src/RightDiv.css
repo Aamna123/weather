@@ -1,7 +1,7 @@
 .rightDiv {
   display: flex;
   flex-direction: column;
-  height: 91.5vh;
+  height: 100%;
   position: relative;
 }
 .topHeading {
@@ -34,6 +34,7 @@
 }
 .upperDiv {
   margin-left: 4%;
+  height: 80%;
   display: flex;
   flex-direction: column;
   gap: 7px;
@@ -95,6 +96,8 @@
 .lower-div {
   border-top: 3px solid #bbb;
   margin-top: 5%;
+  margin-bottom: 2%;
+  
   display: flex;
   flex-direction: row;
   justify-content: center;
